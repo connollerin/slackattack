@@ -69,7 +69,7 @@ controller.hears(['I\'m hungry'], ['direct_message', 'direct_mention', 'mention'
     convo.ask('Would you like food recommendations near you?', [
       {
         pattern: bot.utterances.yes,
-        callback() {
+        callback: () => {
           convo.say('Ok great!');
           // do something else...
           foodType(convo);
@@ -78,13 +78,13 @@ controller.hears(['I\'m hungry'], ['direct_message', 'direct_mention', 'mention'
       },
       {
         pattern: bot.utterances.no,
-        callback() {
+        callback: () => {
           convo.say('Fine go get some food yourself.');
         },
       },
       {
         default: true,
-        callback() {
+        callback: () => {
           // just repeat the question
           convo.repeat();
         },
