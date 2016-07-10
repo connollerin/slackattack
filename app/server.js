@@ -3,6 +3,15 @@ import botkit from 'botkit';
 
 console.log('starting bot');
 
+const Yelp = require('yelp');
+
+const yelp = new Yelp({
+  consumer_key: 'ia4F-OVDixmShG8b00Qacg',
+  consumer_secret: '6tbYBbtqO8bTCjQRCMdCDvBhLnY',
+  token: 'KsEmCm-mgP6vuxEkMgvR1oXuFxYU2B7Z',
+  token_secret: 'jqukyw_dRc6u6zgrbxnDu6r3qjQ',
+});
+
 // botkit controller
 const controller = botkit.slackbot({
   debug: false,
@@ -53,17 +62,60 @@ controller.hears(['bye', 'see ya', 'adios'], ['direct_message', 'direct_mention'
   });
 });
 
-var Yelp = require('yelp');
-
-var yelp = new Yelp({
-  consumer_key: 'ia4F-OVDixmShG8b00Qacg',
-  consumer_secret: '6tbYBbtqO8bTCjQRCMdCDvBhLnY',
-  token: 'KsEmCm-mgP6vuxEkMgvR1oXuFxYU2B7Z',
-  token_secret: 'jqukyw_dRc6u6zgrbxnDu6r3qjQ',
-});
-
-
-yelp.businesses.forEach(business => {
-  // do something with business
-
+// code below adapted from https://github.com/howdyai/botkit
+controller.hears(['I\'m hungry'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
+  initialAsk();
+  function initialAsk(err, convo) {
+    convo.ask('Would you like food recommendations near you?', [
+      {
+        pattern: bot.utterances.yes,
+        callback() {
+          convo.say('Ok great!');
+          // do something else...
+          foodType(convo);
+          convo.next();
+        },
+      },
+      {
+        pattern: bot.utterances.no,
+        callback() {
+          convo.say('Fine go get some food yourself.');
+        },
+      },
+      {
+        default: true,
+        callback() {
+          // just repeat the question
+          convo.repeat();
+        },
+      },
+    ]);
+  }
+  function foodType(convo) {
+    convo.ask('What type of food are you interested in?', (response) => {
+      location(response, convo);
+      convo.next();
+    });
+  }
+  function location(answer, convo) {
+    convo.ask('Ok, where are you?', (response) => {
+      convo.say('Ok, hold on I am finding results.');
+      yelp.search({ term: `${answer.text}`, location: `${response.text}` }).then((data) => {
+        if (data.total < 1) {
+          convo.say('Sorry, I can\'t seem to find any of those restaurants in your area.');
+        } else {
+          const sampleBusiness = data.businesses[0];
+          convo.say(`Here's one that has a rating of ${sampleBusiness.rating}:`);
+          convo.say({
+            title: sampleBusiness.name,
+            text: sampleBusiness.snippet_text,
+            image_url: sampleBusiness.snippet_image_url,
+          });
+        }
+      }).catch((err) => {
+        convo.say('Sorry, I can\'t seem to find any of those restaurants in your area.');
+        console.error(err);
+      });
+    });
+  }
 });
