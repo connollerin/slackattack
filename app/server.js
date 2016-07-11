@@ -52,6 +52,10 @@ controller.hears(['what\'s up?', 'sup?'], ['direct_message', 'direct_mention', '
   bot.reply(message, 'nothing much. wbu?');
 });
 
+controller.hears(['help'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
+  bot.reply(message, 'Hi! I am a bot. I can have limited conversations with you and also look up nearby restaurants! To do so, mention to me that you\'re hungry :)');
+});
+
 controller.hears(['bye', 'see ya', 'adios'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
   bot.api.users.info({ user: message.user }, (err, res) => {
     if (res) {
@@ -67,26 +71,31 @@ controller.hears(['bye', 'see ya', 'adios'], ['direct_message', 'direct_mention'
 
 const location = function location(answer, convo) {
   convo.ask('Ok, where are you?', (response) => {
+    convo.next();
     convo.say('Ok, hold on I am finding results.');
+    convo.next();
     yelp.search({ term: `${answer.text}`, location: `${response.text}` })
     .then((data) => {
-      // if (data.total < 1) {
-      //   convo.say('Sorry, I can\'t seem to find any of those restaurants in your area.');
-      // } else {
-      //   const sampleBusiness = data.businesses[0];
-      //   convo.say(`Here's one that has a rating of ${sampleBusiness.rating}:`);
-      //   convo.say({
-      //     title: sampleBusiness.name,
-      //     text: sampleBusiness.snippet_text,
-      //     image_url: sampleBusiness.snippet_image_url,
-      //   });
-      // }
-      convo.say('hi!');
+      if (data.total < 1) {
+        convo.next();
+        convo.say('Sorry, I can\'t seem to find any of those restaurants in your area.');
+      } else {
+        const sampleBusiness = data.businesses[0];
+        convo.next();
+        convo.say(`Here's one that has a rating of ${sampleBusiness.rating}:`);
+        convo.next();
+        convo.say({
+          title: `${sampleBusiness.name}`,
+          text: `${sampleBusiness.snippet_text}`,
+          image_url: `${sampleBusiness.image_url}`,
+        });
+      }
     })
     .catch((err) => {
       convo.say('Sorry, I can\'t seem to find any of those restaurants in your area.');
       console.error(err);
     });
+    convo.next();
   });
 };
 const foodType = function foodType(convo) {
@@ -109,9 +118,13 @@ const initialAsk = function initialAsk(convo) {
   });
 };
 
-controller.hears(['hungry'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
+controller.hears(['hungry', 'food'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
   bot.startConversation(message, (err, convo) => {
     initialAsk(convo);
     convo.next();
   });
+});
+
+controller.hears([''], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
+  bot.reply(message, 'hmm, I don\'t understand you. Try asking or telling me in a different way.');
 });
