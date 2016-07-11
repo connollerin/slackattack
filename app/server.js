@@ -34,7 +34,7 @@ controller.setupWebserver(process.env.PORT || 3001, (err, webserver) => {
   });
 });
 
-controller.on('erinsbot-wakeup', (bot, message) => {
+controller.on('outgoing_webhook', (bot, message) => {
   bot.replyPublic(message, 'yeah yeah i\'ll be up in a minute...');
 });
 
