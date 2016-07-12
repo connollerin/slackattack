@@ -54,7 +54,7 @@ controller.hears(['hello', 'hi', 'howdy', 'hey'], ['direct_message', 'direct_men
 //   bot.reply(message, 'what are you typing?! :)');
 // });
 
-controller.hears(['what\'s up?', 'sup?'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
+controller.hears(['whats up?', 'sup?'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
   bot.reply(message, 'nothing much. wbu?');
 });
 
