@@ -87,18 +87,18 @@ controller.hears(['bye', 'see ya', 'adios'], ['direct_message', 'direct_mention'
 
 const location = function location(answer, convo) {
   convo.ask('Ok, where are you?', (response) => {
-    // convo.next();
+    convo.next();
     convo.say('Ok, hold on I am finding results.');
-    // convo.next();
+    convo.next();
     yelp.search({ term: `${answer.text}`, location: `${response.text}` })
     .then((data) => {
       if (data.businesses.length < 1) {
         convo.say('Sorry, I can\'t seem to find any of those restaurants in your area.');
-        // convo.next();
+        convo.next();
       } else {
-        // convo.next();
+        convo.next();
         convo.say(`Here's one that has a rating of ${data.businesses[0].rating}:`);
-        // convo.next();
+        convo.next();
         const attachments = {
           attachments: [
             {
@@ -109,13 +109,13 @@ const location = function location(answer, convo) {
           ],
         };
         convo.say(attachments);
-        // convo.next();
+        convo.next();
       }
     })
     .catch((err) => {
       convo.say('Sorry, I can\'t seem to find any of those restaurants in your area.');
       console.error(err);
-      // convo.next();
+      convo.next();
     });
     convo.next();
   });
