@@ -58,6 +58,10 @@ controller.hears(['whats up?', 'sup?'], ['direct_message', 'direct_mention', 'me
   bot.reply(message, 'nothing much. wbu?');
 });
 
+controller.hears(['wbu?'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
+  bot.reply(message, 'I\'m awesome thanks!!');
+});
+
 controller.hears(['help'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
   bot.reply(message, 'Hi! I am a bot. I can have limited conversations with you and also look up nearby restaurants! To do so, mention to me that you\'re hungry :)');
 });
