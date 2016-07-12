@@ -92,7 +92,6 @@ const location = function location(answer, convo) {
     convo.next();
     yelp.search({ term: `${answer.text}`, location: `${response.text}` })
     .then((data) => {
-      convo.next();
       if (data.total < 1) {
         convo.next();
         convo.say('Sorry, I can\'t seem to find any of those restaurants in your area.');
