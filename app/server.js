@@ -1,8 +1,10 @@
-// example bot
+// Erinsbot code- Erin Connolly for HW2 in CS52 Summer 2016
+
 import botkit from 'botkit';
 
 console.log('starting bot');
 
+// Yelp API code adapted from https://github.com/olalonde/node-yelp
 const Yelp = require('yelp');
 
 const yelp = new Yelp({
@@ -11,6 +13,8 @@ const yelp = new Yelp({
   token: 'KsEmCm-mgP6vuxEkMgvR1oXuFxYU2B7Z',
   token_secret: 'jqukyw_dRc6u6zgrbxnDu6r3qjQ',
 });
+
+// Most of the code below taken or adapted from https://github.com/dartmouth-cs52/slackattack examples
 
 // botkit controller
 const controller = botkit.slackbot({
@@ -48,7 +52,7 @@ controller.hears(['hello', 'hi', 'howdy', 'hey'], ['direct_message', 'direct_men
   });
 });
 
-// for testing, commented out this section--a little TOO annoying
+// for testing, commented out this section--a little TOO annoying--but works :)
 
 // controller.on('user_typing', (bot, message) => {
 //   bot.reply(message, 'what are you typing?! :)');
@@ -78,6 +82,8 @@ controller.hears(['bye', 'see ya', 'adios'], ['direct_message', 'direct_mention'
 
 // code below adapted from https://github.com/howdyai/botkit and https://github.com/howdyai/botkit/blob/master/examples/convo_bot.js and
 // https://github.com/olalonde/node-yelp
+
+// defined several functions for searching restaurants using yelp's api, they call each other in the conversation
 
 const location = function location(answer, convo) {
   convo.ask('Ok, where are you?', (response) => {
@@ -133,12 +139,16 @@ const initialAsk = function initialAsk(convo) {
   });
 };
 
+// this is where the conversation starts--when hungry is mentioned--then in turn each function calls the one above it before searching location
+
 controller.hears(['hungry', 'food'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
   bot.startConversation(message, (err, convo) => {
     initialAsk(convo);
     convo.next();
   });
 });
+
+// default message for if someone types something we don't recognize
 
 controller.hears([''], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
   bot.reply(message, 'hmm, I don\'t understand you. Try asking or telling me in a different way.');
