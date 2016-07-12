@@ -85,15 +85,14 @@ const location = function location(answer, convo) {
         convo.next();
         convo.say('Sorry, I can\'t seem to find any of those restaurants in your area.');
       } else {
-        const sampleBusiness = data.businesses[0];
         convo.next();
-        convo.say(`Here's one that has a rating of ${sampleBusiness.rating}:`);
+        convo.say(`Here's one that has a rating of ${data.businesses[0].rating}:`);
         convo.next();
         const attachments = {
           attachments: [
             {
-              title: `${sampleBusiness.name}`,
-              text: `${sampleBusiness.snippet_text}`,
+              title: `${data.businesses[0].name}`,
+              text: `${data.businesses[0].snippet_text}`,
               image_url: `${data.businesses[0].image_url}`,
             },
           ],
