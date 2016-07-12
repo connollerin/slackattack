@@ -84,41 +84,33 @@ const location = function location(answer, convo) {
     convo.next();
     convo.say('Ok, hold on I am finding results.');
     convo.next();
-    // yelp.search({ term: `${answer.text}`, location: `${response.text}` })
-    // .then((data) => {
-    //   if (data.total < 1) {
-    //     convo.next();
-    //     convo.say('Sorry, I can\'t seem to find any of those restaurants in your area.');
-    //   } else {
-    //     convo.next();
-    //     convo.say(`Here's one that has a rating of ${data.businesses[0].rating}:`);
-    //     convo.next();
-    //     const attachments = {
-    //       attachments: [
-    //         {
-    //           title: `${data.businesses[0].name}`,
-    //           text: `${data.businesses[0].snippet_text}`,
-    //           image_url: `${data.businesses[0].image_url}`,
-    //         },
-    //       ],
-    //     };
-    const attachments = {
-      attachments: [
-        {
-          title: 'woof!',
-          text: 'barking',
-        },
-      ],
-    };
-    convo.say(attachments);
+    yelp.search({ term: `${answer.text}`, location: `${response.text}` })
+    .then((data) => {
+      if (data.total < 1) {
+        convo.next();
+        convo.say('Sorry, I can\'t seem to find any of those restaurants in your area.');
+      } else {
+        convo.next();
+        convo.say(`Here's one that has a rating of ${data.businesses[0].rating}:`);
+        convo.next();
+        const attachments = {
+          attachments: [
+            {
+              title: `${data.businesses[0].name}`,
+              text: `${data.businesses[0].snippet_text}`,
+              image_url: `${data.businesses[0].image_url}`,
+            },
+          ],
+        };
+        convo.say(attachments);
+        convo.next();
+      }
+    })
+    .catch((err) => {
+      convo.say('Sorry, I can\'t seem to find any of those restaurants in your area.');
+      console.error(err);
+    });
     convo.next();
-    //   }
-    // })
-    // .catch((err) => {
-    //   convo.say('Sorry, I can\'t seem to find any of those restaurants in your area.');
-    //   console.error(err);
-    // });
-    // convo.next();
   });
 };
 const foodType = function foodType(convo) {
