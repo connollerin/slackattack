@@ -89,11 +89,17 @@ const location = function location(answer, convo) {
         convo.next();
         convo.say(`Here's one that has a rating of ${sampleBusiness.rating}:`);
         convo.next();
-        convo.say({
-          title: `${sampleBusiness.name}`,
-          text: `${sampleBusiness.snippet_text}`,
-          image_url: `${sampleBusiness.image_url}`,
-        });
+        const attachments = {
+          attachments: [
+            {
+              title: `${sampleBusiness.name}`,
+              text: `${sampleBusiness.snippet_text}`,
+              image_url: `${data.businesses[0].image_url}`,
+            },
+          ],
+        };
+        convo.say(attachments);
+        convo.next();
       }
     })
     .catch((err) => {
