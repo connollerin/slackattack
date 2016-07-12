@@ -38,7 +38,7 @@ controller.on('outgoing_webhook', (bot, message) => {
   bot.replyPublic(message, 'yeah yeah i\'ll be up in a minute...');
 });
 
-controller.hears(['hello', 'hi', 'howdy'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
+controller.hears(['hello', 'hi', 'howdy', 'hey'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
   bot.api.users.info({ user: message.user }, (err, res) => {
     if (res) {
       bot.reply(message, `Hello, ${res.user.name}!`);
