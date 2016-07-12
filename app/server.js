@@ -48,10 +48,11 @@ controller.hears(['hello', 'hi', 'howdy', 'hey'], ['direct_message', 'direct_men
   });
 });
 
-// for testing comment out haha
-// controller.on('user_typing', (bot, message) => {
-//   bot.reply(message, 'what are you typing?! :)');
-// });
+// for testing comment out this section
+
+controller.on('user_typing', (bot, message) => {
+  bot.reply(message, 'what are you typing?! :)');
+});
 
 controller.hears(['what\'s up?', 'sup?'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
   bot.reply(message, 'nothing much. wbu?');
