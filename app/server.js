@@ -48,7 +48,7 @@ controller.hears(['hello', 'hi', 'howdy', 'hey'], ['direct_message', 'direct_men
   });
 });
 
-// for testing comment out this section
+// for testing, commented out this section--a little TOO annoying
 
 // controller.on('user_typing', (bot, message) => {
 //   bot.reply(message, 'what are you typing?! :)');
