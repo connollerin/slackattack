@@ -35,7 +35,7 @@ controller.setupWebserver(process.env.PORT || 3001, (err, webserver) => {
 });
 
 controller.on('outgoing_webhook', (bot, message) => {
-  bot.replyPublic(message, 'yeah yeah i\'ll be up in a minute...');
+  bot.replyPublic(message, 'yeah yeah i\'ll be up in a minute....\nhttp://media2.giphy.com/media/Eccdry010Mj1m/giphy.gif');
 });
 
 controller.hears(['hello', 'hi', 'howdy', 'hey'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
